@@ -1,1 +1,11 @@
-# kitkat
+# KitKat
+
+## Get Start
+
+### Insert partials
+
+In your HTML, use {'your-partial-path'} to insert partials.
+
+### Compile HTML
+
+Run `node main.js input-file output-file`
