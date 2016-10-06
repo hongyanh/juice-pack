@@ -11,3 +11,11 @@ In your HTML, use `{'your-partial-path'}` to insert partials, please use relativ
 ### Compile HTML
 
 Run `juice-pack template-folder export-folder`
+
+### Watch file changes
+
+Run `juice-pack template-folder export-folder -w`
+
+### TODOs
+
+* Pass-in parameters to partials

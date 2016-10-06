@@ -3,7 +3,9 @@ var mkdirp = require('mkdirp');
 var colors = require('colors');
 var fs = require('fs');
 var path = require('path');
+var watch = require('node-watch');
 var getDirName = require('path').dirname;
+var program = require('commander');
 var regExp = /\{\s?'([^'\s?}]+)\'\s?}/g;
 
 function fromDir(startPath, filter, callback){
@@ -14,7 +16,6 @@ function fromDir(startPath, filter, callback){
     }
 
     var files=fs.readdirSync(startPath);
-    console.log(files);
     for(var i=0;i<files.length;i++){
         var filename=path.join(startPath,files[i]);
         var stat = fs.lstatSync(filename);
@@ -27,16 +28,14 @@ function fromDir(startPath, filter, callback){
 
 function writeFile(path, contents, cb) {
   mkdirp(getDirName(path), function (err) {
-    if (err) return cb(err);
-    fs.writeFile(path, contents, cb);
-    console.log('Saved to ' + path.cyan);
+      if (err) return cb(err);
+      fs.writeFile(path, contents, cb);
+      console.log('Saved to ' + path.cyan);
   });
 }
 
-if (process.argv[2] && process.argv[3]) {
-  console.log('Importing from ' + process.argv[2].yellow);
-
-  fromDir(process.argv[2], /\.html$/, function(filename){
+function compileFiles() {
+    fromDir(process.argv[2], /\.html$/, function(filename){
         fs.readFile(filename, 'utf8', function(err, contents) {
         var matches = [];
         if (err) {
@@ -62,6 +61,26 @@ if (process.argv[2] && process.argv[3]) {
         writeFile(exportPath, contents);
       });
   });
+}
+
+if (process.argv[2] && process.argv[3]) {
+  console.log('Importing from ' + process.argv[2].yellow);
+  compileFiles();
 } else {
   console.log('Please run juice-pack with import and export directories, for example: "juice-pack templates/ exports/"'.red);
 }
+
+program
+  .version('0.0.1')
+  .option('-w, --watch', 'Watch Files')
+  .parse(process.argv);
+
+if (program.watch) {
+  console.log('Watching file changes...');
+  watch(process.argv[2], function(filename) {
+    console.log(filename, ' changed.');
+    compileFiles();
+  });
+}
+
+
