@@ -1,6 +1,6 @@
 {
   "name": "juice-pack",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A lightweight HTML partial compiler for web designers.",
   "main": "main.js",
   "scripts": {
