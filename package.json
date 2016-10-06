@@ -27,5 +27,8 @@
   "homepage": "https://github.com/hongyanh/juice-pack#readme",
   "dependencies": {
     "mkdirp": "^0.5.1"
+  },
+  "bin": {
+    "juice-pack": "./main.js"
   }
 }

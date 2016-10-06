@@ -1,10 +1,13 @@
 # Juice Pack
 A lightweight HTML partial compiler for web designers.
 
+### Install Juice Pack
+`npm install juice-pack -g`
+
 ### Insert partials
 
-In your HTML, use `{'your-partial-path'}` to insert partials.
+In your HTML, use `{'your-partial-path'}` to insert partials, please use relative path.
 
 ### Compile HTML
 
-Run `node main.js input-file output-file`
+Run `juice-pack template-folder export-folder`
