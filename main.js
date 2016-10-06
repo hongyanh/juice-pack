@@ -1,16 +1,17 @@
 #! /usr/bin/env node
 var mkdirp = require('mkdirp');
+var colors = require('colors');
 var fs = require('fs');
 var path = require('path');
 var getDirName = require('path').dirname;
 var regExp = /\{\s?'([^'\s?}]+)\'\s?}/g;
 
-console.log('Importing from ' + process.argv[2]);
+console.log('Importing from ' + process.argv[2].yellow);
 
 function fromDir(startPath,filter,callback){
 
     if (!fs.existsSync(startPath)){
-        console.log("no dir ",startPath);
+        console.log('No Directory Provided'.red);
         return;
     }
 
@@ -28,8 +29,8 @@ function fromDir(startPath,filter,callback){
 function writeFile(path, contents, cb) {
   mkdirp(getDirName(path), function (err) {
     if (err) return cb(err);
-
     fs.writeFile(path, contents, cb);
+    console.log('Saved to ' + path.cyan);
   });
 }
 
@@ -37,7 +38,7 @@ fromDir(process.argv[2],/\.html$/,function(filename){
       fs.readFile(filename, 'utf8', function(err, contents) {
       var matches = [];
       if (err) {
-        return console.log(err);
+        return console.log(err.red);
       }
       var match = regExp.exec(contents);
       while (match != null) {
@@ -48,11 +49,10 @@ fromDir(process.argv[2],/\.html$/,function(filename){
         var match = matches[i];
         var patialContent = fs.readFileSync(process.argv[2].replace(/\/?$/, '/') + match[1], 'utf8');
           contents = contents.replace(match[0], patialContent);
-          console.log('Replaced url ' + match[1]);
+          console.log('Replaced url ' + match[1].cyan);
       }
       var exportPath = filename.replace(process.argv[2], process.argv[3]);
-      console.log('Exporting to ' + exportPath);
-
+      console.log('Exporting to ' + exportPath.yellow);
       writeFile(exportPath, contents);
     });
 });

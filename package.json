@@ -1,6 +1,6 @@
 {
   "name": "juice-pack",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A lightweight HTML partial compiler for web designers.",
   "main": "main.js",
   "scripts": {
@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/hongyanh/juice-pack#readme",
   "dependencies": {
+    "colors": "^1.1.2",
     "mkdirp": "^0.5.1"
   },
   "bin": {
