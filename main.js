@@ -6,7 +6,7 @@ var path = require('path');
 var getDirName = require('path').dirname;
 var regExp = /\{\s?'([^'\s?}]+)\'\s?}/g;
 
-function fromDir(startPath,filter,callback){
+function fromDir(startPath, filter, callback){
 
     if (!fs.existsSync(startPath)){
         console.log('No Directory Provided'.red);
@@ -14,6 +14,7 @@ function fromDir(startPath,filter,callback){
     }
 
     var files=fs.readdirSync(startPath);
+    console.log(files);
     for(var i=0;i<files.length;i++){
         var filename=path.join(startPath,files[i]);
         var stat = fs.lstatSync(filename);
@@ -32,10 +33,10 @@ function writeFile(path, contents, cb) {
   });
 }
 
-if (process.argv[2] && process.argv[2]) {
+if (process.argv[2] && process.argv[3]) {
   console.log('Importing from ' + process.argv[2].yellow);
 
-  fromDir(process.argv[2],/\.html$/,function(filename){
+  fromDir(process.argv[2], /\.html$/, function(filename){
         fs.readFile(filename, 'utf8', function(err, contents) {
         var matches = [];
         if (err) {
@@ -52,7 +53,11 @@ if (process.argv[2] && process.argv[2]) {
             contents = contents.replace(match[0], patialContent);
             console.log('Replaced url ' + match[1].cyan);
         }
-        var exportPath = filename.replace(process.argv[2], process.argv[3]);
+        if (process.argv[2] === '.' || process.argv[2] === './') {
+          var exportPath = process.argv[3] + filename; 
+        } else {
+          var exportPath = filename.replace(process.argv[2], process.argv[3]);
+        }
         console.log('Exporting to ' + exportPath.yellow);
         writeFile(exportPath, contents);
       });
@@ -60,4 +65,3 @@ if (process.argv[2] && process.argv[2]) {
 } else {
   console.log('Please run juice-pack with import and export directories, for example: "juice-pack templates/ exports/"'.red);
 }
-
