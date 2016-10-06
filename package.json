@@ -1,0 +1,31 @@
+{
+  "name": "juice-pack",
+  "version": "0.1.0",
+  "description": "A lightweight HTML partial compiler for web designers.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hongyanh/juice-pack.git"
+  },
+  "keywords": [
+    "juice",
+    "pack",
+    "HTML",
+    "partial",
+    "compiler",
+    "web",
+    "template"
+  ],
+  "author": "Yan Hong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hongyanh/juice-pack/issues"
+  },
+  "homepage": "https://github.com/hongyanh/juice-pack#readme",
+  "dependencies": {
+    "mkdirp": "^0.5.1"
+  }
+}
