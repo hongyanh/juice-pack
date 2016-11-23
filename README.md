@@ -16,6 +16,10 @@ Run `juice-pack template-folder export-folder`
 
 Run `juice-pack template-folder export-folder -w`
 
+### Disable recurse subdirectories
+
+Run `juice-pack template-folder export-folder --nr`
+
 ### TODOs
 
 * Pass-in parameters to partials

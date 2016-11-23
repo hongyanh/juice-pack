@@ -19,7 +19,7 @@ function fromDir(startPath, filter, callback){
     for(var i=0;i<files.length;i++){
         var filename=path.join(startPath,files[i]);
         var stat = fs.lstatSync(filename);
-        if (stat.isDirectory()){
+        if (stat.isDirectory() && !program.noRecurse){
             fromDir(filename,filter,callback); //recurse
         }
         else if (filter.test(filename)) callback(filename);
@@ -63,17 +63,18 @@ function compileFiles() {
   });
 }
 
+program
+  .version('0.0.1')
+  .option('-w, --watch', 'Watch Files')
+  .option('--nr, --noRecurse', 'Disable recurse subdirectories')
+  .parse(process.argv);
+
 if (process.argv[2] && process.argv[3]) {
   console.log('Importing from ' + process.argv[2].yellow);
   compileFiles();
 } else {
   console.log('Please run juice-pack with import and export directories, for example: "juice-pack templates/ exports/"'.red);
 }
-
-program
-  .version('0.0.1')
-  .option('-w, --watch', 'Watch Files')
-  .parse(process.argv);
 
 if (program.watch) {
   console.log('Watching file changes...');
