@@ -53,9 +53,9 @@ function compileFiles() {
             console.log('Replaced url ' + match[1].cyan);
         }
         if (process.argv[2] === '.' || process.argv[2] === './') {
-          var exportPath = process.argv[3] + filename; 
+          var exportPath = path.normalize(process.argv[3]) + filename;
         } else {
-          var exportPath = filename.replace(process.argv[2], process.argv[3]);
+          var exportPath = filename.replace(path.normalize(process.argv[2]), path.normalize(process.argv[3]));
         }
         console.log('Exporting to ' + exportPath.yellow);
         writeFile(exportPath, contents);
