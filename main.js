@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 var mkdirp = require('mkdirp');
 var colors = require('colors');
+var pretty = require('pretty');
 var fs = require('fs');
 var path = require('path');
 var watch = require('node-watch');
@@ -57,6 +58,7 @@ function compileFiles() {
         } else {
           var exportPath = filename.replace(path.normalize(process.argv[2]), path.normalize(process.argv[3]));
         }
+        contents=pretty(contents);
         console.log('Exporting to ' + exportPath.yellow);
         writeFile(exportPath, contents);
       });

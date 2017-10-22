@@ -29,7 +29,8 @@
     "colors": "^1.1.2",
     "commander": "^2.9.0",
     "mkdirp": "^0.5.1",
-    "node-watch": "^0.4.0"
+    "node-watch": "^0.4.0",
+    "pretty":"2.0.0"
   },
   "bin": {
     "juice-pack": "./main.js"
