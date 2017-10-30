@@ -49,8 +49,8 @@ function compileFiles() {
         }
         for (var i = 0; i < matches.length; i++) {
           var match = matches[i];
-          var patialContent = fs.readFileSync(process.argv[2].replace(/\/?$/, '/') + match[1], 'utf8');
-            contents = contents.replace(match[0], patialContent);
+          var partialContent = fs.readFileSync(process.argv[2].replace(/\/?$/, '/') + match[1], 'utf8');
+            contents = contents.replace(match[0], partialContent);
             console.log('Replaced url ' + match[1].cyan);
         }
         if (process.argv[2] === '.' || process.argv[2] === './') {
