@@ -28,10 +28,12 @@ function fromDir(startPath, filter, callback){
 };
 
 function writeFile(path, contents, cb) {
-  mkdirp(getDirName(path), function (err) {
-      if (err) return cb(err);
-      fs.writeFile(path, contents, cb);
-      console.log('Saved to ' + path.cyan);
+  mkdirp(getDirName(path), function(err) {
+    if (err) return cb(err);
+    fs.writeFile(path, contents, cb, err => {
+      if (err) throw err;
+      console.log("Saved to " + path.green);
+    });
   });
 }
 
