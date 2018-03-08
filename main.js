@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 var mkdirp = require('mkdirp');
 var colors = require('colors');
+var pretty = require('pretty');
 var fs = require('fs');
 var path = require('path');
 var watch = require('node-watch');
@@ -19,7 +20,7 @@ function fromDir(startPath, filter, callback){
     for(var i=0;i<files.length;i++){
         var filename=path.join(startPath,files[i]);
         var stat = fs.lstatSync(filename);
-        if (stat.isDirectory()){
+        if (stat.isDirectory() && !program.noRecurse){
             fromDir(filename,filter,callback); //recurse
         }
         else if (filter.test(filename)) callback(filename);
@@ -27,10 +28,12 @@ function fromDir(startPath, filter, callback){
 };
 
 function writeFile(path, contents, cb) {
-  mkdirp(getDirName(path), function (err) {
-      if (err) return cb(err);
-      fs.writeFile(path, contents, cb);
-      console.log('Saved to ' + path.cyan);
+  mkdirp(getDirName(path), function(err) {
+    if (err) return cb(err);
+    fs.writeFile(path, contents, cb, err => {
+      if (err) throw err;
+      console.log("Saved to " + path.green);
+    });
   });
 }
 
@@ -48,20 +51,27 @@ function compileFiles() {
         }
         for (var i = 0; i < matches.length; i++) {
           var match = matches[i];
-          var patialContent = fs.readFileSync(process.argv[2].replace(/\/?$/, '/') + match[1], 'utf8');
-            contents = contents.replace(match[0], patialContent);
+          var partialContent = fs.readFileSync(process.argv[2].replace(/\/?$/, '/') + match[1], 'utf8');
+            contents = contents.replace(match[0], partialContent);
             console.log('Replaced url ' + match[1].cyan);
         }
         if (process.argv[2] === '.' || process.argv[2] === './') {
-          var exportPath = process.argv[3] + filename; 
+          var exportPath = path.normalize(process.argv[3]) + filename;
         } else {
-          var exportPath = filename.replace(process.argv[2], process.argv[3]);
+          var exportPath = filename.replace(path.normalize(process.argv[2]), path.normalize(process.argv[3]));
         }
+        contents=pretty(contents);
         console.log('Exporting to ' + exportPath.yellow);
         writeFile(exportPath, contents);
       });
   });
 }
+
+program
+  .version('0.0.1')
+  .option('-w, --watch', 'Watch Files')
+  .option('--nr, --noRecurse', 'Disable recurse subdirectories')
+  .parse(process.argv);
 
 if (process.argv[2] && process.argv[3]) {
   console.log('Importing from ' + process.argv[2].yellow);
@@ -69,11 +79,6 @@ if (process.argv[2] && process.argv[3]) {
 } else {
   console.log('Please run juice-pack with import and export directories, for example: "juice-pack templates/ exports/"'.red);
 }
-
-program
-  .version('0.0.1')
-  .option('-w, --watch', 'Watch Files')
-  .parse(process.argv);
 
 if (program.watch) {
   console.log('Watching file changes...');
